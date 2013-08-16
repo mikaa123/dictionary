@@ -1,10 +1,16 @@
-#dictionary-dropzone {
+#dropzone {
 	border: 5px dashed #ccc;
-	width: 100%;
+	width: 70%;
 	height: 200px;
 	margin: 20px auto;
+	float: left;
 }
 
-#dictionary-dropzone.hover {
+#dropzone.hover {
 	border: 10px dashed #333;
+}
+
+#file-list {
+	float: right;
+	width: 20%;
 }
