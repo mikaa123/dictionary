@@ -2,10 +2,15 @@
   "name": "nwtest",
   "main": "index.html",
   "window": {
-  	"width": 800,
-  	"height": 600,
-  	"toolbar": false,
-  	"frame": true,
-  	"resizable": true
+    "width": 800,
+    "height": 600,
+    "toolbar": false,
+    "frame": true,
+    "resizable": true
+  },
+  "devDependencies": {
+    "grunt": "~0.4.1",
+    "grunt-contrib-sass": "~0.4.1",
+    "grunt-contrib-watch": "~0.5.1"
   }
 }
