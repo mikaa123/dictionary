@@ -1,8 +1,15 @@
-var DropZoneView = require('../views/dropzone_view'),
-	DictionaryCollection = require('../collections/dictionaries'),
-	Dictionary = require('../models/dictionary');
+var CreateSetView = require('../views/create_set');
 
 module.exports = Backbone.Router.extend({
+
+	initialize: function() {
+		this.views = [];
+		this.views.createSet = new CreateSetView({
+			el: $('#create-set')[0]
+		});
+
+		this.navigate('sets/new', { trigger: true });
+	},
 
 	routes: {
 		'sets': 'sets',
@@ -11,16 +18,6 @@ module.exports = Backbone.Router.extend({
 	},
 
 	createSet: function() {
-		var dictionaries = new DictionaryCollection();
-		var dropzoneView = new DropZoneView({
-			collection: dictionaries
-		});
 
-		$('.create-set').html(dropzoneView.el);
-
-		dictionaries.add([{
-			lang: 'French',
-			type: 'xml'
-		}]);
 	}
 });

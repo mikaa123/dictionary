@@ -11,5 +11,4 @@ $(document).ready(function() {
 	var AppRouter = require('./routers/router');
 		router = new AppRouter();
 	Backbone.history.start();
-	router.navigate('sets/new', { trigger: true });
 });
