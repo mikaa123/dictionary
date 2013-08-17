@@ -8,26 +8,45 @@
 		<script type="text/javascript" src="public/js/underscore-min.js"></script>
 		<script type="text/javascript" src="public/js/backbone-min.js"></script>
 		<script type="text/javascript" src="runner.js"></script>
-  	</head>
-  <body>
-  	<div class="container" id="create-set">
-  		<h1>hello</h1>
-  		<div class="dropzone"></div>
-  		buttons
-  	</div>
+		</head>
+	<body>
+		<div class="container" id="create-set">
+			<!-- Modal -->
+			<div class="modal fade" id="namePromptModal" tabindex="-1" role="dialog">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+							<h4 class="modal-title">Enter a name</h4>
+						</div>
+						<div class="modal-body">
+							the body
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+							<button type="button" class="btn btn-primary">Create</button>
+						</div>
+					</div><!-- /.modal-content -->
+				</div><!-- /.modal-dialog -->
+			</div><!-- /.modal -->
 
-  	<script type="text/template" id="dropzone-table-template">
-  		<thead>
-  			<tr>
-  				<th>Language</th>
-  				<th>Kind</th>
-  				<th>Remove</th>
-  			</tr>
-  		</thead>
-  		<tbody>
-  		</tbody>
-  	</script>
+			<h1>hello</h1>
+			<div class="dropzone"></div>
+			<a data-toggle="modal" href="#namePromptModal" class="btn btn-primary btn-lg" id="createBtn" disabled="disabled">Create the set</a>
+		</div>
+
+		<script type="text/template" id="dropzone-table-template">
+			<thead>
+				<tr>
+					<th>Language</th>
+					<th>Kind</th>
+					<th>Remove</th>
+				</tr>
+			</thead>
+			<tbody>
+			</tbody>
+		</script>
 
 	<script src="public/js/bootstrap.min.js"></script>
-  </body>
+	</body>
 </html>
