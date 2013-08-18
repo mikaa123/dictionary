@@ -1,4 +1,4 @@
-var BaseElementView = require('../base_element_view');
+var BaseElementView = require('../tableview/base_table_element_view');
 
 module.exports = BaseElementView.extend({
 	template: _.template([

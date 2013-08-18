@@ -1,14 +1,9 @@
-var DropZoneElementView = require('./dropzone_element_view');
+var BaseTableView = require('../tableview/base_table_view'),
+	DropZoneElementView = require('./dropzone_element_view');
 
-module.exports = Backbone.View.extend({
-	tagName: 'table',
-	className: 'table',
+module.exports = BaseTableView.extend({
+	ElementView: DropZoneElementView,
 	template: _.template($('#dropzone-table-template').html()),
-
-	initialize: function() {
-		this.listenTo(this.collection, "add", this.render);
-		this.render();
-	},
 
 	events: {
 		'dragenter': 'dragenter',
@@ -34,18 +29,5 @@ module.exports = Backbone.View.extend({
 				'path': file.path
 			});
 		}, this);
-	},
-
-	render: function() {
-		this.$el.html(this.template());
-
-		this.collection.each(function(dictionary) {
-			var dropZoneElement = new DropZoneElementView({
-				model: dictionary
-			});
-
-			this.$('tbody').append(dropZoneElement.el);
-		}, this);
-		return this;
 	}
 });

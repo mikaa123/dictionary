@@ -5,7 +5,6 @@ module.exports = Backbone.View.extend({
 		this.listenTo(this.model, 'change', this.render);
 		this.listenTo(this.model, 'destroy', this.remove);
 		this.render();
-		console.log('super initialize called');
 	},
 
 	originalEvents: {
@@ -17,7 +16,6 @@ module.exports = Backbone.View.extend({
 	},
 
 	removeElement: function() {
-		console.log('remove called');
 		this.model.destroy();
 	},
 
