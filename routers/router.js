@@ -15,7 +15,7 @@ module.exports = Backbone.Router.extend({
 
 	routes: {
 		'sets': 'sets',
-		'sets/:name': 'set',
+		'set': 'set',
 		'createSet': 'createSet'
 	},
 
@@ -27,5 +27,15 @@ module.exports = Backbone.Router.extend({
 	sets: function() {
 		$('.page').hide();
 		$('#manage-sets').show();
+	},
+
+	set: function() {
+		if (!DICTIONARY.current) {
+			this.navigate('createSet', { trigger: true });
+			return;
+		}
+
+		$('.page').hide();
+		$('#set').show();
 	}
 });

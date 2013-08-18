@@ -1,4 +1,4 @@
-var DropZoneView = require('../views/dropzone_view'),
+var DropZoneView = require('./dropzone/dropzone_view'),
 	DictionaryCollection = require('../collections/dictionaries');
 
 module.exports = Backbone.View.extend({

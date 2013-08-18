@@ -1,4 +1,4 @@
-var DropZoneElementView = require('../views/dropzone_element_view');
+var DropZoneElementView = require('./dropzone_element_view');
 
 module.exports = Backbone.View.extend({
 	tagName: 'table',

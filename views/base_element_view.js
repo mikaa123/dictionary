@@ -1,22 +1,23 @@
 module.exports = Backbone.View.extend({
 	tagName: 'tr',
-	template: _.template([
-		'<td><%= lang %></td>',
-		'<td><%= type %></td>',
-		'<td><a href="#">remove</a></td>'
-		].join('\n')),
 
 	initialize: function() {
 		this.listenTo(this.model, 'change', this.render);
 		this.listenTo(this.model, 'destroy', this.remove);
 		this.render();
+		console.log('super initialize called');
 	},
 
-	events: {
-		'click a': 'removeElement'
+	originalEvents: {
+		'click a.remove': 'removeElement'
+	},
+
+	events: function() {
+		return _.extend({},this.originalEvents,this.additionalEvents);
 	},
 
 	removeElement: function() {
+		console.log('remove called');
 		this.model.destroy();
 	},
 

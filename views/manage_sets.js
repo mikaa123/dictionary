@@ -1,4 +1,4 @@
-var SetCollectionView = require('../views/setcollection_view');
+var SetCollectionView = require('./setcollection/setcollection_view');
 
 module.exports = Backbone.View.extend({
 	initialize: function() {

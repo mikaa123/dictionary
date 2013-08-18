@@ -1,4 +1,4 @@
-var SetCollectionElementView = require('../views/setcollection_element_view');
+var SetCollectionElementView = require('./setcollection_element_view');
 
 module.exports = Backbone.View.extend({
 	tagName: 'table',
