@@ -2,7 +2,7 @@ module.exports = Backbone.View.extend({
 	tagName: 'tr',
 	template: _.template([
 		'<td><%= name %></td>',
-		'<td><%= size %></td>',
+		'<td><%= dictionaries.length %></td>',
 		'<td><a href="#" class="manage">manage</a></td>',
 		'<td><a href="#" class="remove">remove</a></td>'
 		].join('\n')),
@@ -22,10 +22,7 @@ module.exports = Backbone.View.extend({
 	},
 
 	render: function() {
-		this.$el.html(this.template({
-			name: this.model.get('name'),
-			size: this.model.get('dictionaries').length
-		}));
+		this.$el.html(this.template(this.model.attributes));
 		return this;
 	}
 });
