@@ -9,6 +9,16 @@ module.exports = Backbone.View.extend({
 		this.render();
 	},
 
+	events: {
+		'click #add-set': 'addSet'
+	},
+
+	addSet: function() {
+		DICTIONARY.router.navigate('createSet', {
+			trigger: true
+		});
+	},
+
 	render: function() {
 		this.$('.set-list').html(this.setCollectionView.el);
 	}

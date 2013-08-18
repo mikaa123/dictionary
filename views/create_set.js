@@ -3,6 +3,10 @@ var DropZoneView = require('../views/dropzone_view'),
 
 module.exports = Backbone.View.extend({
 	initialize: function() {
+		this.newSet();
+	},
+
+	newSet: function() {
 		this.dictionaries = new DictionaryCollection();
 		this.dropzoneView = new DropZoneView({
 			collection: this.dictionaries
@@ -13,12 +17,14 @@ module.exports = Backbone.View.extend({
 		});
 
 		this.listenTo(this.dictionaries, 'remove', function() {
-			if (!dictionaries.length) {
+			if (!this.dictionaries.length) {
 				this.$('#createBtn').attr('disabled', 'disabled');
 			}
 		});
 
 		this.render();
+		this.$('#createBtn').attr('disabled', 'disabled');
+		this.$('#set-name-prompt').val('');
 	},
 
 	events: {
@@ -44,6 +50,9 @@ module.exports = Backbone.View.extend({
 		});
 
 		this.$('#name-prompt-modal').modal('hide');
+
+		this.stopListening(this.dictionaries);
+		this.newSet();
 
 		DICTIONARY.router.navigate('sets', {
 			trigger: true
