@@ -9,7 +9,7 @@ module.exports = BaseElementView.extend({
 		].join('\n')),
 
 	additionalEvents: {
-		'click .manage': 'manageElement'
+		'click a.manage': 'manageElement'
 	},
 
 	manageElement: function() {

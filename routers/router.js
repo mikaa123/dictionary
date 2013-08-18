@@ -1,4 +1,5 @@
 var CreateSetView = require('../views/create_set'),
+	ManageSetView = require('../views/manage_set'),
 	ManageSetsView = require('../views/manage_sets');
 
 module.exports = Backbone.Router.extend({
@@ -35,7 +36,12 @@ module.exports = Backbone.Router.extend({
 			return;
 		}
 
+		this.views.manageSet = new ManageSetView({
+			el: $('#manage-set')[0],
+			dictionaries: DICTIONARY.current.get('dictionaries')
+		});
+
 		$('.page').hide();
-		$('#set').show();
+		$('#manage-set').show();
 	}
 });
