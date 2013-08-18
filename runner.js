@@ -12,12 +12,11 @@ window.ondrop = function(e) { e.preventDefault(); return false; };
 
 $(document).ready(function() {
 	var AppRouter = require('./routers/router');
-		router = new AppRouter(),
 		Sets = require('./collections/sets');
 
-	Backbone.history.start();
-	router.navigate('createSet', { trigger: true });
-
 	global.DICTIONARY.sets = new Sets();
-	global.DICTIONARY.router = router;
+	global.DICTIONARY.router = new AppRouter();
+
+	Backbone.history.start();
+	global.DICTIONARY.router.navigate('createSet', { trigger: true });
 });

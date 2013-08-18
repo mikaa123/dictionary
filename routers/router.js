@@ -1,4 +1,5 @@
-var CreateSetView = require('../views/create_set');
+var CreateSetView = require('../views/create_set'),
+	ManageSetsView = require('../views/manage_sets');
 
 module.exports = Backbone.Router.extend({
 
@@ -6,6 +7,9 @@ module.exports = Backbone.Router.extend({
 		this.views = [];
 		this.views.createSet = new CreateSetView({
 			el: $('#create-set')[0]
+		});
+		this.views.manageSets = new ManageSetsView({
+			el: $('#manage-sets')[0]
 		});
 	},
 
@@ -16,7 +20,6 @@ module.exports = Backbone.Router.extend({
 	},
 
 	createSet: function() {
-		console.log('hey');
 		$('.page').hide();
 		$('#create-set').show();
 	},
