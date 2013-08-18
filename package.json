@@ -8,7 +8,7 @@
     "frame": true
   },
   "dependencies": {
-    "underscore": "*"
+    "when": "*"
   },
   "devDependencies": {
     "grunt": "~0.4.1",

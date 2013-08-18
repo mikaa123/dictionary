@@ -29,7 +29,16 @@ module.exports = Backbone.View.extend({
 
 	events: {
 		'click #prompt-close': 'promptCancel',
+		'click #createBtn': 'promptOpen',
 		'click #prompt-create': 'promptCreate'
+	},
+
+	promptOpen: function() {
+		var that = this;
+		this.$('#name-prompt-modal').modal('show')
+				.on('shown.bs.modal', function() {
+					that.$('input').focus();
+				});
 	},
 
 	promptCancel: function() {

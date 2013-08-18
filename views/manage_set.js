@@ -13,7 +13,7 @@ module.exports = Backbone.View.extend({
 
 	events: {
 		'keyup #keys': 'keyTyped',
-		'click #delete-keys': 'deleteKeys'
+		'click a#delete-keys': 'deleteKeys'
 	},
 
 	keyTyped: function() {
@@ -30,9 +30,9 @@ module.exports = Backbone.View.extend({
 				return d.get('selected');
 			});
 
-			selectedDictionaries.each(function(dictionary) {
-				dictionary.removeKeys(keys);
-			});
+		_.each(selectedDictionaries, function(dictionary) {
+			dictionary.removeKeys(keys);
+		});
 	},
 
 	render: function() {
