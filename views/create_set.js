@@ -21,6 +21,35 @@ module.exports = Backbone.View.extend({
 		this.render();
 	},
 
+	events: {
+		'click #prompt-close': 'promptCancel',
+		'click #prompt-create': 'promptCreate'
+	},
+
+	promptCancel: function() {
+		this.$('#name-prompt-modal').modal('hide');
+	},
+
+	promptCreate: function(e) {
+		var dictionaryName = this.$('#set-name-prompt').val();
+
+		if (!dictionaryName) {
+			this.$('.form-group').addClass('has-error');
+			return;
+		}
+
+		DICTIONARY.sets.add({
+			name: dictionaryName,
+			dictionaries: this.collection
+		});
+
+		this.$('#name-prompt-modal').modal('hide');
+
+		DICTIONARY.router.navigate('sets', {
+			trigger: true
+		});
+	},
+
 	render: function() {
 		this.$('.dropzone').html(this.dropzoneView.el);
 	}

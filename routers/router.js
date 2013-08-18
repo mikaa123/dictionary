@@ -7,17 +7,22 @@ module.exports = Backbone.Router.extend({
 		this.views.createSet = new CreateSetView({
 			el: $('#create-set')[0]
 		});
-
-		this.navigate('sets/new', { trigger: true });
 	},
 
 	routes: {
 		'sets': 'sets',
-		'set': 'set',
-		'sets/new': 'createSet'
+		'sets/:name': 'set',
+		'createSet': 'createSet'
 	},
 
 	createSet: function() {
+		console.log('hey');
+		$('.page').hide();
+		$('#create-set').show();
+	},
 
+	sets: function() {
+		$('.page').hide();
+		$('#manage-sets').show();
 	}
 });

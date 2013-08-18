@@ -10,9 +10,9 @@
 		<script type="text/javascript" src="runner.js"></script>
 		</head>
 	<body>
-		<div class="container" id="create-set">
+		<div class="page container" id="create-set">
 			<!-- Modal -->
-			<div class="modal fade" id="namePromptModal" tabindex="-1" role="dialog">
+			<div class="modal fade" id="name-prompt-modal" tabindex="-1" role="dialog">
 				<div class="modal-dialog">
 					<div class="modal-content">
 						<div class="modal-header">
@@ -20,11 +20,14 @@
 							<h4 class="modal-title">Enter a name</h4>
 						</div>
 						<div class="modal-body">
-							the body
+							<div class="form-group">
+								<label class="control-label" for="set-name-prompt">Enter a name for the set:</label>
+								<input type="text" class="form-control input-lg" id="set-name-prompt">
+							</div>
 						</div>
 						<div class="modal-footer">
-							<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-							<button type="button" class="btn btn-primary">Create</button>
+							<button type="button" id="prompt-close" class="btn btn-default" data-dismiss="modal">Close</button>
+							<button type="button" id="prompt-create" class="btn btn-primary">Create</button>
 						</div>
 					</div><!-- /.modal-content -->
 				</div><!-- /.modal-dialog -->
@@ -32,7 +35,11 @@
 
 			<h1>hello</h1>
 			<div class="dropzone"></div>
-			<a data-toggle="modal" href="#namePromptModal" class="btn btn-primary btn-lg" id="createBtn" disabled="disabled">Create the set</a>
+			<a data-toggle="modal" href="#name-prompt-modal" class="btn btn-primary btn-lg" id="createBtn" disabled="disabled">Create the set</a>
+		</div>
+
+		<div class="page container" id="manage-sets">
+			<h1>Manage sets</h1>
 		</div>
 
 		<script type="text/template" id="dropzone-table-template">
