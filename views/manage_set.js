@@ -12,7 +12,8 @@ module.exports = Backbone.View.extend({
 	},
 
 	events: {
-		'keyup #keys': 'keyTyped'
+		'keyup #keys': 'keyTyped',
+		'click #delete-keys': 'deleteKeys'
 	},
 
 	keyTyped: function() {
@@ -21,6 +22,17 @@ module.exports = Backbone.View.extend({
 		} else {
 			this.$('#delete-keys').attr('disabled', 'disabled');
 		}
+	},
+
+	deleteKeys: function() {
+		var keys = _.compact(this.$('#keys').val().replace(/\s+/g, '').split(';')),
+			selectedDictionaries = this.dictionaryListView.collection.filter(function(d) {
+				return d.get('selected');
+			});
+
+			selectedDictionaries.each(function(dictionary) {
+				dictionary.removeKeys(keys);
+			});
 	},
 
 	render: function() {
