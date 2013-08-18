@@ -7,6 +7,20 @@ module.exports = Backbone.View.extend({
 		});
 
 		this.render();
+		this.$('#delete-keys').attr('disabled', 'disabled');
+		this.$('#keys').val('');
+	},
+
+	events: {
+		'keyup #keys': 'keyTyped'
+	},
+
+	keyTyped: function() {
+		if (this.$('#keys').val()) {
+			this.$('#delete-keys').removeAttr('disabled');
+		} else {
+			this.$('#delete-keys').attr('disabled', 'disabled');
+		}
 	},
 
 	render: function() {
