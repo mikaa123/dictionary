@@ -44,10 +44,19 @@ module.exports = Backbone.Model.extend({
 	},
 
 	removeKeysFromArray: function(array, keys) {
-		var len = array.length;
+		var len = array.length,
+			that = this;
 
 		var matchKey = function(l) {
-			return _.some(keys, function(k) { return l.match('\"' + k + '\"'); });
+			var keyMatcher = function (k) {
+				if (that.get('type') === 'xml') {
+					return '\"' + k + '\"';
+				} else if (that.get('type') === 'properties') {
+					return '^' + k + '\=';
+				}
+			};
+
+			return _.some(keys, function(k) { return l.match(keyMatcher(k)); });
 		};
 
 		while(len--) {

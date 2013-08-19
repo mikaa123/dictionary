@@ -11,16 +11,30 @@ global._ = require('underscore');
 Dictionary = require('../../models/dictionary');
 
 var dictionary = new Dictionary(),
-	data = [
+	dataXml = [
 		'"SOMEKEY"',
 		'"SOME_OTHER_KEY"',
 		'"SOMEKEY"',
 		'"SOME_MORE_KEY"'
+	],
+	dataProperties = [
+		'SOMEKEY=ghjghj',
+		'SOME_OTHER_KEY=gfd',
+		'SOMEKEY=',
+		'SOME_MORE_KEY=sdfsd'
 	];
 
-function arrayEqual(keys, expected) {
+function arrayEqualXml(keys, expected) {
 	return function() {
-		var dataArray = data.slice(0);
+		var dataArray = dataXml.slice(0);
+		var newArr = dictionary.removeKeysFromArray(dataArray, keys);
+		assert.deepEqual(newArr, expected);
+	};
+}
+
+function arrayEqualProperties(keys, expected) {
+	return function() {
+		var dataArray = dataProperties.slice(0);
 		var newArr = dictionary.removeKeysFromArray(dataArray, keys);
 		assert.deepEqual(newArr, expected);
 	};
@@ -30,31 +44,64 @@ describe('Dictionary', function() {
 	before(function() {
 
 	}),
-	describe('#removeKeysFromArray', function() {
-		it('removes one key', arrayEqual(['SOME_OTHER_KEY'],
+	describe('#removeKeysFromArray for xml file', function() {
+		before(function() {
+			dictionary.set('type', 'xml');
+		});
+		it('removes one key', arrayEqualXml(['SOME_OTHER_KEY'],
 			[
 				'"SOMEKEY"',
 				'"SOMEKEY"',
 				'"SOME_MORE_KEY"'
 			]
 		));
-		it('removes several keys', arrayEqual(['SOME_OTHER_KEY', 'SOME_MORE_KEY'],
+		it('removes several keys', arrayEqualXml(['SOME_OTHER_KEY', 'SOME_MORE_KEY'],
 			[
 				'"SOMEKEY"',
 				'"SOMEKEY"'
 			]
 		));
-		it('removes duplicate keys', arrayEqual(['SOMEKEY'],
+		it('removes duplicate keys', arrayEqualXml(['SOMEKEY'],
 			[
 				'"SOME_OTHER_KEY"',
 				'"SOME_MORE_KEY"'
 			]
 		));
-		it('does not do anything when no keys are found', arrayEqual(['UNDEFINED_KEY'],
-			data
+		it('does not do anything when no keys are found', arrayEqualXml(['UNDEFINED_KEY'],
+			dataXml
 		));
-		it('does not do anything when no keys are passed', arrayEqual([],
-			data
+		it('does not do anything when no keys are passed', arrayEqualXml([],
+			dataXml
+		));
+	});
+	describe('#removeKeysFromArray for properties file', function() {
+		before(function() {
+			dictionary.set('type', 'properties');
+		});
+		it('removes one key', arrayEqualProperties(['SOME_OTHER_KEY'],
+			[
+				'SOMEKEY=ghjghj',
+				'SOMEKEY=',
+				'SOME_MORE_KEY=sdfsd'
+			]
+		));
+		it('removes several keys', arrayEqualProperties(['SOME_OTHER_KEY', 'SOME_MORE_KEY'],
+			[
+				'SOMEKEY=ghjghj',
+				'SOMEKEY='
+			]
+		));
+		it('removes duplicate keys', arrayEqualProperties(['SOMEKEY'],
+			[
+				'SOME_OTHER_KEY=gfd',
+				'SOME_MORE_KEY=sdfsd'
+			]
+		));
+		it('does not do anything when no keys are found', arrayEqualProperties(['UNDEFINED_KEY'],
+			dataProperties
+		));
+		it('does not do anything when no keys are passed', arrayEqualProperties([],
+			dataProperties
 		));
 	});
 });
