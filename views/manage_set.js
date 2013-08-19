@@ -31,7 +31,9 @@ module.exports = Backbone.View.extend({
 			});
 
 		_.each(selectedDictionaries, function(dictionary) {
-			dictionary.removeKeys(keys);
+			dictionary.removeKeys(keys, function() {
+				console.log("DONE.");
+			});
 		});
 	},
 

@@ -1,13 +1,25 @@
 var when = require('when'),
 	fs = require('fs');
 
-function read(filepath) {
+function readFile(filepath) {
 	var deferred = when.defer();
 	fs.readFile(filepath, function (err, data) {
-		if( err ){
-				deferred.reject(err);
+		if (err) {
+			deferred.reject(err);
 		} else {
-				deferred.resolve(data);
+			deferred.resolve(data);
+		}
+	});
+	return deferred.promise;
+}
+
+function writeFile(filepath, dataString) {
+	var deferred = when.defer();
+	fs.writeFile(filepath, dataString, function(err) {
+		if (err) {
+			deferred.reject(err);
+		} else {
+			deferred.resolve();
 		}
 	});
 	return deferred.promise;
@@ -18,27 +30,32 @@ module.exports = Backbone.Model.extend({
 		selected: true
 	},
 
-	removeKeys: function(keys) {
-		_.each(keys, function(key) {
-			this.removeKey(key);
-		}, this);
+	removeKeys: function(keys, done) {
+		var that = this;
+		readFile(this.get('path')).then(function(data) {
+			var dataArray = data.toString().split('\n'),
+				writeFilePromise = writeFile(that.get('path'),
+					that.removeKeysFromArray(dataArray, keys).join('\n'));
+
+			writeFilePromise.then(function() {
+				done();
+			});
+		});
 	},
 
-	removeKey: function(key) {
-		var readPromise = read(this.get('path'));
+	removeKeysFromArray: function(array, keys) {
+		var len = array.length;
 
-		var successCb = function(data) {
-			var dataArray =	data.toString().split('\n'),
-				line = _.find(dataArray, function(l) {
-					debugger;
-					if (l.match('\"' + key + '\"')) return true;
-				});
-
-				dataArray.splice(dataArray.indexOf(line), 1);
-
-				debugger;
+		var matchKey = function(l) {
+			return _.some(keys, function(k) { return l.match('\"' + k + '\"'); });
 		};
 
-		readPromise.then(successCb);
+		while(len--) {
+			if (matchKey(array[len])) {
+				array.splice(len, 1);
+			}
+		}
+
+		return array;
 	}
 });
