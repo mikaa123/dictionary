@@ -97,6 +97,12 @@ module.exports = Backbone.View.extend({
 		var keys,
 			selectedSets = this.filterSelectedFrom(this.setCollection);
 
+		this.$('.newkey-input').each(function(input) {
+			if (!$(this).val()) {
+				$(this).parent().addClass('has-error');
+			}
+		});
+
 	},
 
 	render: function() {
