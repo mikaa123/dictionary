@@ -22,10 +22,15 @@ module.exports = BaseTableView.extend({
 	drop: function(e) {
 		e.preventDefault();
 		_.each(e.originalEvent.dataTransfer.files, function(file) {
-			// Test if file is a dictionary
+			var nameFormat = /dictionary\_(.*)?\.(xml|properties)$/g.exec(file.path);
+
+			if (!nameFormat) {
+				return;
+			}
+
 			this.collection.add({
-				'lang': 'FR',
-				'type': 'xml',
+				'lang': nameFormat[1],
+				'type': nameFormat[2],
 				'path': file.path
 			});
 		}, this);
