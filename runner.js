@@ -18,5 +18,18 @@ $(document).ready(function() {
 	global.DICTIONARY.router = new AppRouter();
 
 	Backbone.history.start();
-	global.DICTIONARY.router.navigate('createSet', { trigger: true });
+
+	if (localStorage.sets) {
+		global.DICTIONARY.sets.addFromJSON(JSON.parse(localStorage.sets));
+		global.DICTIONARY.router.navigate('sets', { trigger: true });
+	} else {
+		global.DICTIONARY.router.navigate('createSet', { trigger: true });
+	}
+
+	global.DICTIONARY.sets.on('add', function() {
+		localStorage.sets = JSON.stringify(global.DICTIONARY.sets.toJSON());
+	});
+	global.DICTIONARY.sets.on('remove', function() {
+		localStorage.sets = JSON.stringify(global.DICTIONARY.sets.toJSON());
+	});
 });

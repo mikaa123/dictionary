@@ -6,7 +6,7 @@ module.exports = BaseElementView.extend({
 		'<td><%= path %></td>',
 		'<td><%= lang %></td>',
 		'<td><%= type %></td>'
-		].join('\n')),
+	].join('\n')),
 
 	additionalEvents: {
 		'click input': 'selection'
