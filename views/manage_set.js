@@ -1,6 +1,7 @@
 var DictionaryListView = require('./dictionarylist/dictionarylist_view'),
 	SetCollectionView = require('./setcollection/setcollection_view'),
-	SetCollectionElementSelectView = require('./setcollection/setcollection_element_select_view');
+	SetCollectionElementSelectView = require('./setcollection/setcollection_element_select_view'),
+	Dictionaries = require('../collections/dictionaries');
 
 module.exports = Backbone.View.extend({
 	initialize: function(options) {
@@ -8,8 +9,9 @@ module.exports = Backbone.View.extend({
 			collection: options.dictionaries
 		});
 
+		this.setCollection = new Dictionaries(DICTIONARY.sets.filter(function(s) { return s !== DICTIONARY.current; }));
 		this.setCollectionView = new SetCollectionView({
-			collection: DICTIONARY.sets,
+			collection: this.setCollection,
 			template: _.template($('#setcollection-select-table-template').html()),
 			ElementView: SetCollectionElementSelectView
 		});
@@ -45,11 +47,19 @@ module.exports = Backbone.View.extend({
 		}
 	},
 
+	keysFromPrompt: function() {
+		return _.compact(this.$('#keys').val().replace(/\s+/g, '').split(';'));
+	},
+
+	filterSelectedFrom: function(collection) {
+		return collection.filter(function(d) {
+			return d.get('selected');
+		});
+	},
+
 	deleteKeys: function() {
-		var keys = _.compact(this.$('#keys').val().replace(/\s+/g, '').split(';')),
-			selectedDictionaries = this.dictionaryListView.collection.filter(function(d) {
-				return d.get('selected');
-			});
+		var keys = this.keysFromPrompt(),
+			selectedDictionaries = this.filterSelectedFrom(this.dictionaryListView.collection);
 
 		_.each(selectedDictionaries, function(dictionary) {
 			dictionary.removeKeys(keys, function() {
@@ -61,6 +71,10 @@ module.exports = Backbone.View.extend({
 	// when the link is called
 	migrateDialogOpen: function() {
 		this.$('#migrate-modal').modal('show');
+
+		// should create as many inputs as there are keys.
+		// the inputs will have the old key name as placeholder
+		// input field (together with the label) will be a template
 	},
 
 	// when the close button is pressed
@@ -70,7 +84,9 @@ module.exports = Backbone.View.extend({
 
 	// when the migrate button is called.
 	migrateKeys: function() {
-		var keys;
+		var keys,
+			selectedSets = this.filterSelectedFrom(this.setCollection);
+
 	},
 
 	render: function() {
