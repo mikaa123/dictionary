@@ -100,9 +100,20 @@ module.exports = Backbone.View.extend({
 		this.$('.newkey-input').each(function(input) {
 			if (!$(this).val()) {
 				$(this).parent().addClass('has-error');
+			} else {
+				$(this).parent().removeClass('has-error');
 			}
 		});
 
+		if (this.$('.has-error').length) {
+			return;
+		}
+
+		_.each(selectedSets, function(set) {
+			set.migrate(DICTIONARY.current, this.migrateKeyCollection, function() {
+				console.log('DONE.');
+			});
+		}, this);
 	},
 
 	render: function() {

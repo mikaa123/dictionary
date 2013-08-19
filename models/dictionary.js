@@ -30,6 +30,24 @@ module.exports = Backbone.Model.extend({
 		selected: true
 	},
 
+	/**
+	 * Returns the value for the given key or undefined if the key doesn't exist.
+	 * @param  {String} key
+	 * @return {String}
+	 */
+	valueForKey: function(key) {
+
+	},
+
+	/**
+	 * Appends the <key, val> tuple at the end of the dictionary's file; save it; and returns true or success.
+	 * @param {String} key
+	 * @param {String} val
+	 */
+	addEntry: function(key, val) {
+
+	}
+
 	removeKeys: function(keys, done) {
 		var that = this;
 		readFile(this.get('path')).then(function(data) {
