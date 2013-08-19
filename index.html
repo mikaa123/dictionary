@@ -67,6 +67,7 @@
 						<div class="modal-body">
 							<p>Select the set(s) you want to migrate the keys with:</p>
 							<div class="set-list"></div>
+							<div class="migrate-collection"></div>
 						</div>
 						<div class="modal-footer">
 							<button id="migrate-modal-close" type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -127,6 +128,14 @@
 			<tbody>
 			</tbody>
 		</script>
+
+		<script type="text/template" id="migratekey-template">
+			<div class="migratekey-group">
+				<label for="<%= oldKey %>"><%= oldKey %></label>
+				<input type="text" class="form-control" placeholder="Enter a new key">
+			</div>
+		</script>
+
 
 	<script src="public/js/bootstrap.min.js"></script>
 	</body>

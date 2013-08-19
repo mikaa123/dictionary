@@ -1,7 +1,9 @@
 var DictionaryListView = require('./dictionarylist/dictionarylist_view'),
 	SetCollectionView = require('./setcollection/setcollection_view'),
 	SetCollectionElementSelectView = require('./setcollection/setcollection_element_select_view'),
-	Dictionaries = require('../collections/dictionaries');
+	Dictionaries = require('../collections/dictionaries'),
+	MigrateKeyCollection = require('../collections/migratekeys'),
+	MigrateCollectionView = require('./migratecollection/migratecollection_view');
 
 module.exports = Backbone.View.extend({
 	initialize: function(options) {
@@ -14,6 +16,11 @@ module.exports = Backbone.View.extend({
 			collection: this.setCollection,
 			template: _.template($('#setcollection-select-table-template').html()),
 			ElementView: SetCollectionElementSelectView
+		});
+
+		this.migrateKeyCollection = new MigrateKeyCollection();
+		this.migrateCollectionView = new MigrateCollectionView({
+			collection: this.migrateKeyCollection
 		});
 
 		this.render();
@@ -70,15 +77,18 @@ module.exports = Backbone.View.extend({
 
 	// when the link is called
 	migrateDialogOpen: function() {
-		this.$('#migrate-modal').modal('show');
+		var keys = this.keysFromPrompt();
 
-		// should create as many inputs as there are keys.
-		// the inputs will have the old key name as placeholder
-		// input field (together with the label) will be a template
+		_.each(keys, function(key) {
+			this.migrateKeyCollection.add({ oldKey: key });
+		}, this);
+
+		this.$('#migrate-modal').modal('show');
 	},
 
 	// when the close button is pressed
 	migrateDialogClose: function () {
+		this.migrateKeyCollection.reset();
 		this.$('#migrate-modal').modal('hide');
 	},
 
@@ -92,5 +102,6 @@ module.exports = Backbone.View.extend({
 	render: function() {
 		this.$('.dictionary-list').html(this.dictionaryListView.el);
 		this.$('.set-list').html(this.setCollectionView.el);
+		this.$('.migrate-collection').html(this.migrateCollectionView.el);
 	}
 });
