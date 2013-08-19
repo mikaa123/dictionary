@@ -62,7 +62,7 @@
 					<div class="modal-content">
 						<div class="modal-header">
 							<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-							<h4 class="modal-title">Migrate keys with:</h4>
+							<h4 class="modal-title">Migrate keys</h4>
 						</div>
 						<div class="modal-body">
 							<p>Select the set(s) you want to migrate the keys with:</p>
@@ -132,7 +132,7 @@
 		<script type="text/template" id="migratekey-template">
 			<div class="migratekey-group">
 				<label for="<%= oldKey %>"><%= oldKey %></label>
-				<input type="text" class="form-control" placeholder="Enter a new key">
+				<input type="text" class="form-control" value="<%= newKey %>" placeholder="Enter a new key">
 			</div>
 		</script>
 

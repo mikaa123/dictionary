@@ -55,7 +55,7 @@ module.exports = Backbone.View.extend({
 	},
 
 	keysFromPrompt: function() {
-		return _.compact(this.$('#keys').val().replace(/\s+/g, '').split(';'));
+		return _.uniq(_.compact(this.$('#keys').val().replace(/\s+/g, '').split(';')));
 	},
 
 	filterSelectedFrom: function(collection) {
