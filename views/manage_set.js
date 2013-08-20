@@ -106,7 +106,8 @@ module.exports = Backbone.View.extend({
 			currentSubSet,
 
 			// The sets we want to migrate the current sub-set to.
-			selectedSets = this.filterSelectedFrom(this.setCollection);
+			selectedSets = this.filterSelectedFrom(this.setCollection),
+			that = this;
 
 		this.$('.newkey-input').each(function(input) {
 			if (!$(this).val()) {
@@ -120,6 +121,8 @@ module.exports = Backbone.View.extend({
 			return;
 		}
 
+		this.$('#migrate-modal-migrate').button('loading');
+
 		// Let's start by creating the current sub-set of dictionaries we'd like to merge into
 		// the selected sets.
 		currentSubSet = new DictionarySet({
@@ -130,8 +133,8 @@ module.exports = Backbone.View.extend({
 		// Now we can migrate each of the selected sets with the sub-set chose by the user.
 		_.each(selectedSets, function(set) {
 			set.migrate(currentSubSet, this.migrateKeyCollection, function() {
-				// Probably do some button state business here.
-				console.log('DONE.');
+				that.$('#migrate-modal-migrate').button('reset');
+				that.$('#migrate-modal').modal('hide');
 			});
 		}, this);
 	},
