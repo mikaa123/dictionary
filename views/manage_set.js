@@ -124,7 +124,7 @@ module.exports = Backbone.View.extend({
 		// the selected sets.
 		currentSubSet = new DictionarySet({
 			name: DICTIONARY.current.get('name'),
-			dictionaries: this.filterSelectedFrom(this.dictionaryListView.collection)
+			dictionaries: new Dictionaries(this.filterSelectedFrom(this.dictionaryListView.collection))
 		});
 
 		// Now we can migrate each of the selected sets with the sub-set chose by the user.

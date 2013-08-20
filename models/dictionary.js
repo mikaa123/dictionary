@@ -40,11 +40,8 @@ module.exports = Backbone.Model.extend({
 		var that = this;
 
 		this.dictionaryArray(function(dataArray) {
-			value = that.valueForKeyArray(dataArray, key);
-
-			if (found) {
-				doneCb(value);
-			}
+			var value = that.valueForKeyArray(dataArray, key);
+			doneCb(value);
 		});
 	},
 
@@ -56,42 +53,42 @@ module.exports = Backbone.Model.extend({
 	 */
 	valueForKeyArray: function(array, key) {
 		var value,
-			that = this;
+			that = this,
+			tuple;
 
 		// Takes a line and break it into an Object with #key and #val
 		var parseLine = function(line) {
 			var xmlTagExp = /<.*name=\"(.*?)\">(.*?)<\/.*>/,
 				propertiesExp = /^(.*?)=(.*)$/,
-				tuple,
+				tuple = {},
 				match;
 
 			switch(that.get('type')) {
 				case 'xml':
 					match = xmlTagExp.exec(line);
-					tuple = {
-						key: match[1],
-						val: match[2]
-					};
 					break;
 				case 'properties':
 					match = propertiesExp.exec(line);
-					tuple = {
-						key: match[1],
-						val: match[2]
-					};
 					break;
+			}
+
+			if (match) {
+				tuple = {
+					key: match[1],
+					val: match[2]
+				};
 			}
 
 			return tuple;
 		};
 
-		_.find(array, function(line) {
-			var parsedLine = parseLine(line);
-			if (parsedLine.key === key) {
-				value = parsedLine.val;
-				return true;
+		for (var i = 0; i < array.length; ++i) {
+			tuple = parseLine(array[i]);
+			if (tuple.key === key) {
+				value = tuple.val;
+				break;
 			}
-		});
+		};
 
 		return value;
 	},
