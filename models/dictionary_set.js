@@ -23,7 +23,7 @@ module.exports = Backbone.Model.extend({
 					oldDictionary.valueForKey(keyTuple.get('oldKey'), function(value) {
 						if (value) {
 							debugger;
-							// newDictionary.addEntry(keyTuple.get('newKey'), value);
+							newDictionary.addEntry(keyTuple.get('newKey'), value, done);
 						}
 					});
 				});

@@ -67,18 +67,32 @@ module.exports = Backbone.Model.extend({
 				value = tuple.val;
 				break;
 			}
-		};
+		}
 
 		return value;
 	},
 
 	/**
-	 * Appends the <key, val> tuple at the end of the dictionary's file; save it; and returns true or success.
+	 * Appends the <key, val> tuple at the end of the dictionary's file; save it;
+	 * and call the cb.
 	 * @param {String} key
 	 * @param {String} val
+	 * @param {Function} val
 	 */
-	addEntry: function(key, val) {
+	addEntry: function(key, val, cb) {
+		var that = this;
+		var newEntry = function() {
+			if (that.get('type') === 'xml') {
+				return '<term name="'+ key +'">'+ val +'</term>';
+			} else if (that.get('type') === 'properties') {
+				return key +'='+ val;
+			}
+		};
 
+		this.dictionaryArray(function(dataArray) {
+			dataArray.push(newEntry());
+			that.save(dataArray.join('\n'), cb);
+		});
 	},
 
 	/**
@@ -92,11 +106,19 @@ module.exports = Backbone.Model.extend({
 		});
 	},
 
+	/**
+	 * Rewrites the file with the content of the passed String, and call a cb
+	 * @param {String} file
+	 * @param {Function} done
+	 */
+	save: function(file, done) {
+		writeFile(this.get('path'), file).then(done);
+	},
+
 	removeKeys: function(keys, done) {
 		var that = this;
 		this.dictionaryArray(function(dataArray) {
-			var	writeFilePromise = writeFile(that.get('path'), that.removeKeysFromArray(dataArray, keys).join('\n'));
-			writeFilePromise.then(done);
+			that.save(that.removeKeysFromArray(dataArray, keys).join('\n'), done);
 		});
 	},
 
