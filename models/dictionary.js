@@ -48,13 +48,21 @@ module.exports = Backbone.Model.extend({
 
 	},
 
+	/**
+	 * Returns the dictionary file as an array. Useful for caching.
+	 * @param  {Function} doneCb
+	 * @return {Arrau}
+	 */
+	dictionaryArray: function(doneCb) {
+		readFile(this.get('path')).then(function(data) {
+			doneCb(data.toString().split('\n'));
+		});
+	},
+
 	removeKeys: function(keys, done) {
 		var that = this;
-		readFile(this.get('path')).then(function(data) {
-			var dataArray = data.toString().split('\n'),
-				writeFilePromise = writeFile(that.get('path'),
-					that.removeKeysFromArray(dataArray, keys).join('\n'));
-
+		this.dictionaryArray(function(dataArray) {
+			var	writeFilePromise = writeFile(that.get('path'), that.removeKeysFromArray(dataArray, keys).join('\n'));
 			writeFilePromise.then(function() {
 				done();
 			});
