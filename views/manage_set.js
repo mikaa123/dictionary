@@ -64,13 +64,18 @@ module.exports = Backbone.View.extend({
 		});
 	},
 
-	deleteKeys: function() {
+	deleteKeys: function(e) {
 		var keys = this.keysFromPrompt(),
-			selectedDictionaries = this.filterSelectedFrom(this.dictionaryListView.collection);
+			selectedDictionaries = this.filterSelectedFrom(this.dictionaryListView.collection),
+			$button = $(e.currentTarget);
 
+		$button.button('loading');
 		_.each(selectedDictionaries, function(dictionary) {
 			dictionary.removeKeys(keys, function() {
-				console.log("DONE.");
+				$(e.currentTarget).button('complete');
+				setTimeout(function() {
+					$(e.currentTarget).button('reset');
+				}, 500);
 			});
 		});
 	},
