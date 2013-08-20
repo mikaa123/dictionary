@@ -8,7 +8,7 @@
     "frame": true
   },
   "dependencies": {
-    "when": "*"
+    "d.js": "*"
   },
   "devDependencies": {
     "grunt": "~0.4.1",

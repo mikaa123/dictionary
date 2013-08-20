@@ -1,29 +1,8 @@
-var when = require('when'),
+var D = require('d.js'),
 	fs = require('fs');
 
-function readFile(filepath) {
-	var deferred = when.defer();
-	fs.readFile(filepath, function (err, data) {
-		if (err) {
-			deferred.reject(err);
-		} else {
-			deferred.resolve(data);
-		}
-	});
-	return deferred.promise;
-}
-
-function writeFile(filepath, dataString) {
-	var deferred = when.defer();
-	fs.writeFile(filepath, dataString, function(err) {
-		if (err) {
-			deferred.reject(err);
-		} else {
-			deferred.resolve();
-		}
-	});
-	return deferred.promise;
-}
+var readFile = D.nodeCapsule(fs, fs.readFile);
+var writeFile = D.nodeCapsule(fs, fs.writeFile);
 
 module.exports = Backbone.Model.extend({
 	defaults: {
@@ -117,9 +96,7 @@ module.exports = Backbone.Model.extend({
 		var that = this;
 		this.dictionaryArray(function(dataArray) {
 			var	writeFilePromise = writeFile(that.get('path'), that.removeKeysFromArray(dataArray, keys).join('\n'));
-			writeFilePromise.then(function() {
-				done();
-			});
+			writeFilePromise.then(done);
 		});
 	},
 
@@ -132,7 +109,7 @@ module.exports = Backbone.Model.extend({
 				if (that.get('type') === 'xml') {
 					return '\"' + k + '\"';
 				} else if (that.get('type') === 'properties') {
-					return '^' + k + '\=';
+					return '^' + k + '=';
 				}
 			};
 
