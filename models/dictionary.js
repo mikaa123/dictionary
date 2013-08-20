@@ -33,10 +33,55 @@ module.exports = Backbone.Model.extend({
 	/**
 	 * Returns the value for the given key or undefined if the key doesn't exist.
 	 * @param  {String} key
+	 * @param  {Function} doneCb
 	 * @return {String}
 	 */
-	valueForKey: function(key) {
+	valueForKey: function(key, doneCb) {
+		var that = this;
 
+		// Takes a line and break it into an Object with #key and #val
+		var parseLine = function(line) {
+			var xmlTagExp = /<.*?>(.*?)<\/.*>/,
+				propertiesExp = /^(.*?)=(.*)$/,
+				tuple,
+				match;
+
+			switch(that.get('type')) {
+				case 'xml':
+					match = xmlTagExp.exec(line);
+					tuple = {
+						key: match[1],
+						val: match[2]
+					};
+					break;
+				case 'properties':
+					match = propertiesExp.exec(line);
+					tuple = {
+						key: match[1],
+						val: match[2]
+					};
+					break;
+			}
+
+			return tuple;
+		};
+
+		this.dictionaryArray(function(dataArray) {
+			var value,
+				found;
+
+			found = _.find(dataArray, function(line) {
+				var parsedLine = parseLine(line);
+				if (parsedLine === key) {
+					value = parsedLine.val;
+					return true;
+				}
+			});
+
+			if (found) {
+				doneCb(value);
+			}
+		});
 	},
 
 	/**

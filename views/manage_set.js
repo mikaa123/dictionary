@@ -3,7 +3,8 @@ var DictionaryListView = require('./dictionarylist/dictionarylist_view'),
 	SetCollectionElementSelectView = require('./setcollection/setcollection_element_select_view'),
 	Dictionaries = require('../collections/dictionaries'),
 	MigrateKeyCollection = require('../collections/migratekeys'),
-	MigrateCollectionView = require('./migratecollection/migratecollection_view');
+	MigrateCollectionView = require('./migratecollection/migratecollection_view'),
+	DictionarySet = require('../models/dictionary_set');
 
 module.exports = Backbone.View.extend({
 	initialize: function(options) {
@@ -100,6 +101,11 @@ module.exports = Backbone.View.extend({
 	// when the migrate button is called.
 	migrateKeys: function() {
 		var keys,
+
+			// The selected dictionaries in the current set.
+			currentSubSet,
+
+			// The sets we want to migrate the current sub-set to.
 			selectedSets = this.filterSelectedFrom(this.setCollection);
 
 		this.$('.newkey-input').each(function(input) {
@@ -114,8 +120,17 @@ module.exports = Backbone.View.extend({
 			return;
 		}
 
+		// Let's start by creating the current sub-set of dictionaries we'd like to merge into
+		// the selected sets.
+		currentSubSet = new DictionarySet({
+			name: DICTIONARY.current.get('name'),
+			dictionaries: this.filterSelectedFrom(this.dictionaryListView.collection)
+		});
+
+		// Now we can migrate each of the selected sets with the sub-set chose by the user.
 		_.each(selectedSets, function(set) {
-			set.migrate(DICTIONARY.current, this.migrateKeyCollection, function() {
+			set.migrate(currentSubSet, this.migrateKeyCollection, function() {
+				// Probably do some button state business here.
 				console.log('DONE.');
 			});
 		}, this);
