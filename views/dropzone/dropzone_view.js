@@ -19,20 +19,26 @@ module.exports = BaseTableView.extend({
 		console.log('byebye');
 	},
 
+	addFile: function(file) {
+		var nameFormat = /dictionary\_(.*)?\.(xml|properties)$/g.exec(file.path);
+
+		if (!nameFormat) {
+			return;
+		}
+
+		this.collection.add({
+			'lang': nameFormat[1],
+			'type': nameFormat[2],
+			'path': file.path
+		});
+	},
+
 	drop: function(e) {
+		var that = this;
+
 		e.preventDefault();
 		_.each(e.originalEvent.dataTransfer.files, function(file) {
-			var nameFormat = /dictionary\_(.*)?\.(xml|properties)$/g.exec(file.path);
-
-			if (!nameFormat) {
-				return;
-			}
-
-			this.collection.add({
-				'lang': nameFormat[1],
-				'type': nameFormat[2],
-				'path': file.path
-			});
+			that.addFile(file);
 		}, this);
 	}
 });

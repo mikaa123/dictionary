@@ -30,7 +30,20 @@ module.exports = Backbone.View.extend({
 	events: {
 		'click #prompt-close': 'promptCancel',
 		'click #createBtn': 'promptOpen',
-		'click #prompt-create': 'promptCreate'
+		'click #prompt-create': 'promptCreate',
+		'click #load-files': 'loadFiles',
+		'change #fileDialog': 'fileAdded'
+	},
+
+	loadFiles: function() {
+		this.$('#fileDialog').trigger('click');
+	},
+
+	fileAdded: function(e) {
+		var files = this.$('#fileDialog')[0].files;
+		for (var i = 0; i < files.length; ++i) {
+			this.dropzoneView.addFile(files[i]);
+		} 
 	},
 
 	promptOpen: function() {
