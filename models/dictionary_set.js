@@ -24,6 +24,7 @@ module.exports = Backbone.Model.extend({
 						if (value) {
 							newDictionary.addEntry(keyTuple.get('newKey'), value, done);
 						}
+						done();
 					});
 				});
 			}
