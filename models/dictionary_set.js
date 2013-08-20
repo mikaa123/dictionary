@@ -10,7 +10,7 @@ module.exports = Backbone.Model.extend({
 	 */
 	getLang: function(lang) {
 
-	}
+	},
 
 	migrate: function(oldSet, migrateKeyCollection, done) {
 		// for each dictionaries of oldSet,

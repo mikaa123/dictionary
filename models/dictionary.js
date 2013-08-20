@@ -46,7 +46,7 @@ module.exports = Backbone.Model.extend({
 	 */
 	addEntry: function(key, val) {
 
-	}
+	},
 
 	removeKeys: function(keys, done) {
 		var that = this;
