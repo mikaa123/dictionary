@@ -22,6 +22,23 @@ var dictionary = new Dictionary(),
 		'SOME_OTHER_KEY=gfd',
 		'SOMEKEY=',
 		'SOME_MORE_KEY=sdfsd'
+	],
+	xmlFile = [
+        '<term name="AUTHENTICATE_STATUS_1">Identifiant ou mot de passe incorrect</term>',
+        '<term name="AUTHENTICATE_STATUS_2">Session expiré</term>',
+        '<term name="AUTHENTICATE_STATUS_3">Compte désactivé</term>',
+        '<term name="AUTHENTICATE_STATUS_4">Connexion refusée</term>',
+        '<term name="AUTHENTICATE_STATUS_9">Erreur inconnue</term>',
+        '<term name="AUTHENTICATE_STATUS_10">Compte suspendu</term>',
+        '<term name="AUTHENTICATE_STATUS_11">Service en maintenance</term>'
+	],
+	propertiesFile = [
+		"EasyWeb.view.dataroom.admin.wizard.steps.ContactsStep.FILE_NAME=Template_carnet_adresses.xls",
+		"EasyWeb.view.dataroom.admin.wizard.steps.ContactsStep.UPLOAD_DESC=Une fois votre template complété, importez-le ici\u00A0:",
+		"EasyWeb.view.dataroom.admin.wizard.steps.ContactsStep.IMPORT=Lancer l'importation",
+		"EasyWeb.view.dataroom.admin.wizard.steps.ContactsStep.IMPORT_PHASE_UPLOAD=Envoi du fichier...",
+		"EasyWeb.view.dataroom.admin.wizard.steps.ContactsStep.IMPORT_PHASE_TRT=Traitement du fichier...",
+		"EasyWeb.view.dataroom.admin.wizard.steps.ContactsStep.IMPORT_FINISHED=Importation réussie"
 	];
 
 function arrayEqualXml(keys, expected) {
@@ -103,5 +120,27 @@ describe('Dictionary', function() {
 		it('does not do anything when no keys are passed', arrayEqualProperties([],
 			dataProperties
 		));
+	});
+	describe('#valueForKeyArray for xml files', function() {
+		before(function() {
+			dictionary.set('type', 'xml');
+		});
+		it('returns the value for the key', function() {
+			assert.deepEqual(dictionary.valueForKeyArray(xmlFile, 'AUTHENTICATE_STATUS_9'), 'Erreur inconnue');
+		});
+		it('returns nothing if the key is not found', function() {
+			assert.deepEqual(dictionary.valueForKeyArray(xmlFile, 'UNDEFINEDKEY'), undefined);
+		});
+	});
+	describe('#valueForKeyArray for properties files', function() {
+		before(function() {
+			dictionary.set('type', 'properties');
+		});
+		it('returns the value for the key', function() {
+			assert.deepEqual(dictionary.valueForKeyArray(propertiesFile, 'EasyWeb.view.dataroom.admin.wizard.steps.ContactsStep.IMPORT_PHASE_TRT'), 'Traitement du fichier...');
+		});
+		it('returns nothing if the key is not found', function() {
+			assert.deepEqual(dictionary.valueForKeyArray(propertiesFile, 'UNDEFINEDKEY'), undefined);
+		});
 	});
 });

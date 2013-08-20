@@ -39,9 +39,28 @@ module.exports = Backbone.Model.extend({
 	valueForKey: function(key, doneCb) {
 		var that = this;
 
+		this.dictionaryArray(function(dataArray) {
+			value = that.valueForKeyArray(dataArray, key);
+
+			if (found) {
+				doneCb(value);
+			}
+		});
+	},
+
+	/**
+	 * Takes an array and a key and return a value. This method can be tested.
+	 * @param  {Array} array
+	 * @param  {String} key
+	 * @return {String}
+	 */
+	valueForKeyArray: function(array, key) {
+		var value,
+			that = this;
+
 		// Takes a line and break it into an Object with #key and #val
 		var parseLine = function(line) {
-			var xmlTagExp = /<.*?>(.*?)<\/.*>/,
+			var xmlTagExp = /<.*name=\"(.*?)\">(.*?)<\/.*>/,
 				propertiesExp = /^(.*?)=(.*)$/,
 				tuple,
 				match;
@@ -66,22 +85,15 @@ module.exports = Backbone.Model.extend({
 			return tuple;
 		};
 
-		this.dictionaryArray(function(dataArray) {
-			var value,
-				found;
-
-			found = _.find(dataArray, function(line) {
-				var parsedLine = parseLine(line);
-				if (parsedLine === key) {
-					value = parsedLine.val;
-					return true;
-				}
-			});
-
-			if (found) {
-				doneCb(value);
+		_.find(array, function(line) {
+			var parsedLine = parseLine(line);
+			if (parsedLine.key === key) {
+				value = parsedLine.val;
+				return true;
 			}
 		});
+
+		return value;
 	},
 
 	/**
