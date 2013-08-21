@@ -31,7 +31,6 @@ module.exports = Backbone.Model.extend({
 					});
 				},
 				function() {
-					console.log('IM DONE!');
 					callback();
 				});
 			}

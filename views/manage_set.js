@@ -137,14 +137,7 @@ module.exports = Backbone.View.extend({
 		}, function(err) {
 			that.$('#migrate-modal-migrate').button('reset');
 			that.$('#migrate-modal').modal('hide');
-			console.log('Migration finished.');
 		});
-		// _.each(selectedSets, function(set) {
-		// 	set.migrate(currentSubSet, this.migrateKeyCollection, function() {
-		// 		that.$('#migrate-modal-migrate').button('reset');
-		// 		that.$('#migrate-modal').modal('hide');
-		// 	});
-		// }, this);
 	},
 
 	render: function() {

@@ -12,7 +12,6 @@ module.exports = Backbone.View.extend({
 
 	updateNewKey: function() {
 		this.model.set('newKey', this.$('input').val());
-		console.log(this.model.get('newKey'));
 	},
 
 	render: function() {
