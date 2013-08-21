@@ -4,7 +4,8 @@ var DictionaryListView = require('./dictionarylist/dictionarylist_view'),
 	Dictionaries = require('../collections/dictionaries'),
 	MigrateKeyCollection = require('../collections/migratekeys'),
 	MigrateCollectionView = require('./migratecollection/migratecollection_view'),
-	DictionarySet = require('../models/dictionary_set');
+	DictionarySet = require('../models/dictionary_set'),
+	async = require('async');
 
 module.exports = Backbone.View.extend({
 	initialize: function(options) {
@@ -131,12 +132,19 @@ module.exports = Backbone.View.extend({
 		});
 
 		// Now we can migrate each of the selected sets with the sub-set chose by the user.
-		_.each(selectedSets, function(set) {
-			set.migrate(currentSubSet, this.migrateKeyCollection, function() {
-				that.$('#migrate-modal-migrate').button('reset');
-				that.$('#migrate-modal').modal('hide');
-			});
-		}, this);
+		async.each(selectedSets, function(set, callback) {
+			set.migrate(currentSubSet, that.migrateKeyCollection, callback);
+		}, function(err) {
+			that.$('#migrate-modal-migrate').button('reset');
+			that.$('#migrate-modal').modal('hide');
+			console.log('Migration finished.');
+		});
+		// _.each(selectedSets, function(set) {
+		// 	set.migrate(currentSubSet, this.migrateKeyCollection, function() {
+		// 		that.$('#migrate-modal-migrate').button('reset');
+		// 		that.$('#migrate-modal').modal('hide');
+		// 	});
+		// }, this);
 	},
 
 	render: function() {

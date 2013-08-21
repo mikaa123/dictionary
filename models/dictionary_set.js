@@ -1,3 +1,5 @@
+var async = require('async');
+
 module.exports = Backbone.Model.extend({
 	defaults: {
 		selected: false
@@ -15,19 +17,26 @@ module.exports = Backbone.Model.extend({
 	},
 
 	migrate: function(oldSet, migrateKeyCollection, done) {
-		oldSet.get('dictionaries').each(function(oldDictionary) {
+		async.each(oldSet.get('dictionaries').models, _.bind(function(oldDictionary, callback) {
 			var newDictionary = this.getLang(oldDictionary.get('lang'));
 
 			if (newDictionary) {
-				migrateKeyCollection.each(function(keyTuple) {
+				async.each(migrateKeyCollection.models, function(keyTuple, cb) {
 					oldDictionary.valueForKey(keyTuple.get('oldKey'), function(value) {
 						if (value) {
-							newDictionary.addEntry(keyTuple.get('newKey'), value, done);
+							newDictionary.addEntry(keyTuple.get('newKey'), value, cb);
+						} else {
+							cb();
 						}
-						done();
 					});
+				},
+				function() {
+					console.log('IM DONE!');
+					callback();
 				});
 			}
-		}, this);
+		}, this), function( err ) {
+			done();
+		});
 	}
 });
