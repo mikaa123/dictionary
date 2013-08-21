@@ -37,5 +37,10 @@ module.exports = Backbone.Model.extend({
 		}, this), function( err ) {
 			done();
 		});
+	},
+
+	addDictionary: function(dictionary) {
+		this.get('dictionaries').add(dictionary);
+		this.trigger('change');
 	}
 });

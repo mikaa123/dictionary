@@ -30,6 +30,9 @@ $(document).ready(function() {
 		localStorage.sets = JSON.stringify(global.DICTIONARY.sets.toJSON());
 	});
 	global.DICTIONARY.sets.on('remove', function() {
+		if (!global.DICTIONARY.sets.length) {
+			localStorage.removeItem('sets');
+		}
 		localStorage.sets = JSON.stringify(global.DICTIONARY.sets.toJSON());
 	});
 });
