@@ -1,6 +1,6 @@
 var BaseTableView = require('../tableview/base_table_view'),
 	DropZoneElementView = require('./dropzone_element_view'),
-	dictionaryFactory = require('../../models/dictionary_factory');
+	dictionaryFactory = require('../../models/dictionary/dictionary_factory');
 
 module.exports = BaseTableView.extend({
 	ElementView: DropZoneElementView,

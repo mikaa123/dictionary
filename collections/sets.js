@@ -1,6 +1,6 @@
 var DictionarySet = require('../models/dictionary_set'),
 	Dictionaries = require('../collections/dictionaries');
-	dictionaryFactory = require('../models/dictionary_factory');
+	dictionaryFactory = require('../models/dictionary/dictionary_factory');
 
 module.exports = Backbone.Collection.extend({
 	model: DictionarySet,
