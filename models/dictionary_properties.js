@@ -6,7 +6,23 @@ module.exports = Dictionary.extend({
 		selected: true
 	},
 
+	parseLine: function(line) {
+		var regExp = /^(.*?)=(.*)$/,
+			match = regExp.exec(line),
+			result = {};
+
+		if (match) {
+			result.key = match[1];
+			result.value = match[2];
+		}
+
+		return result;
+	},
+
+	writeLine: function(key, value) {
+		return key +'='+ val;
+	},
+
 	initialize: function(options) {
-		console.log('new properties');
 	}
 });
