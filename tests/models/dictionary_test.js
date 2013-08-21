@@ -2,20 +2,23 @@
 
 var assert = require('assert'),
 	Dictionary,
+	DictionaryProperties,
 	dictionary,
 	data;
 
 global.Backbone = require('backbone');
 global._ = require('underscore');
 
-Dictionary = require('../../models/dictionary');
+DictionaryXML = require('../../models/dictionary_xml');
+DictionaryProperties = require('../../models/dictionary_properties');
 
-var dictionary = new Dictionary(),
+var dictionaryXML = new DictionaryXML(),
+	dictionaryProperties = new DictionaryProperties(),
 	dataXml = [
-		'"SOMEKEY"',
-		'"SOME_OTHER_KEY"',
-		'"SOMEKEY"',
-		'"SOME_MORE_KEY"'
+		'<term name="KEY1">val1</term>',
+		'<term name="KEY2">val2</term>',
+		'<term name="KEY1">val1</term>',
+		'<term name="KEY3">val3</term>'
 	],
 	dataProperties = [
 		'SOMEKEY=ghjghj',
@@ -44,7 +47,7 @@ var dictionary = new Dictionary(),
 function arrayEqualXml(keys, expected) {
 	return function() {
 		var dataArray = dataXml.slice(0);
-		var newArr = dictionary.removeKeysFromArray(dataArray, keys);
+		var newArr = dictionaryXML.removeKeysFromArray(dataArray, keys);
 		assert.deepEqual(newArr, expected);
 	};
 }
@@ -52,36 +55,30 @@ function arrayEqualXml(keys, expected) {
 function arrayEqualProperties(keys, expected) {
 	return function() {
 		var dataArray = dataProperties.slice(0);
-		var newArr = dictionary.removeKeysFromArray(dataArray, keys);
+		var newArr = dictionaryProperties.removeKeysFromArray(dataArray, keys);
 		assert.deepEqual(newArr, expected);
 	};
 }
 
 describe('Dictionary', function() {
-	before(function() {
-
-	}),
 	describe('#removeKeysFromArray for xml file', function() {
-		before(function() {
-			dictionary.set('type', 'xml');
-		});
-		it('removes one key', arrayEqualXml(['SOME_OTHER_KEY'],
+		it('removes one key', arrayEqualXml(['KEY2'],
 			[
-				'"SOMEKEY"',
-				'"SOMEKEY"',
-				'"SOME_MORE_KEY"'
+				'<term name="KEY1">val1</term>',
+				'<term name="KEY1">val1</term>',
+				'<term name="KEY3">val3</term>'
 			]
 		));
-		it('removes several keys', arrayEqualXml(['SOME_OTHER_KEY', 'SOME_MORE_KEY'],
+		it('removes several keys', arrayEqualXml(['KEY2', 'KEY3'],
 			[
-				'"SOMEKEY"',
-				'"SOMEKEY"'
+				'<term name="KEY1">val1</term>',
+				'<term name="KEY1">val1</term>'
 			]
 		));
-		it('removes duplicate keys', arrayEqualXml(['SOMEKEY'],
+		it('removes duplicate keys', arrayEqualXml(['KEY1'],
 			[
-				'"SOME_OTHER_KEY"',
-				'"SOME_MORE_KEY"'
+				'<term name="KEY2">val2</term>',
+				'<term name="KEY3">val3</term>'
 			]
 		));
 		it('does not do anything when no keys are found', arrayEqualXml(['UNDEFINED_KEY'],
@@ -92,9 +89,6 @@ describe('Dictionary', function() {
 		));
 	});
 	describe('#removeKeysFromArray for properties file', function() {
-		before(function() {
-			dictionary.set('type', 'properties');
-		});
 		it('removes one key', arrayEqualProperties(['SOME_OTHER_KEY'],
 			[
 				'SOMEKEY=ghjghj',
@@ -122,25 +116,19 @@ describe('Dictionary', function() {
 		));
 	});
 	describe('#valueForKeyArray for xml files', function() {
-		before(function() {
-			dictionary.set('type', 'xml');
-		});
 		it('returns the value for the key', function() {
-			assert.deepEqual(dictionary.valueForKeyArray(xmlFile, 'AUTHENTICATE_STATUS_9'), 'Erreur inconnue');
+			assert.deepEqual(dictionaryXML.valueForKeyArray(xmlFile, 'AUTHENTICATE_STATUS_9'), 'Erreur inconnue');
 		});
 		it('returns nothing if the key is not found', function() {
-			assert.deepEqual(dictionary.valueForKeyArray(xmlFile, 'UNDEFINEDKEY'), undefined);
+			assert.deepEqual(dictionaryXML.valueForKeyArray(xmlFile, 'UNDEFINEDKEY'), undefined);
 		});
 	});
 	describe('#valueForKeyArray for properties files', function() {
-		before(function() {
-			dictionary.set('type', 'properties');
-		});
 		it('returns the value for the key', function() {
-			assert.deepEqual(dictionary.valueForKeyArray(propertiesFile, 'EasyWeb.view.dataroom.admin.wizard.steps.ContactsStep.IMPORT_PHASE_TRT'), 'Traitement du fichier...');
+			assert.deepEqual(dictionaryProperties.valueForKeyArray(propertiesFile, 'EasyWeb.view.dataroom.admin.wizard.steps.ContactsStep.IMPORT_PHASE_TRT'), 'Traitement du fichier...');
 		});
 		it('returns nothing if the key is not found', function() {
-			assert.deepEqual(dictionary.valueForKeyArray(propertiesFile, 'UNDEFINEDKEY'), undefined);
+			assert.deepEqual(dictionaryProperties.valueForKeyArray(propertiesFile, 'UNDEFINEDKEY'), undefined);
 		});
 	});
 });

@@ -1,5 +1,6 @@
 var BaseTableView = require('../tableview/base_table_view'),
-	DropZoneElementView = require('./dropzone_element_view');
+	DropZoneElementView = require('./dropzone_element_view'),
+	dictionaryFactory = require('../../models/dictionary/dictionary_factory');
 
 module.exports = BaseTableView.extend({
 	ElementView: DropZoneElementView,
@@ -26,11 +27,11 @@ module.exports = BaseTableView.extend({
 			return;
 		}
 
-		this.collection.add({
+		this.collection.add(dictionaryFactory({
 			'lang': nameFormat[1],
 			'type': nameFormat[2],
 			'path': file.path
-		});
+		}));
 	},
 
 	drop: function(e) {

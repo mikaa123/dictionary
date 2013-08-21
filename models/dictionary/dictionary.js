@@ -10,6 +10,26 @@ module.exports = Backbone.Model.extend({
 	},
 
 	/**
+	 * Parse a line into a <key, value> tuple.
+	 * @abstract
+	 * @line {String}
+	 * @return {{key: String, value: String}}
+	 */
+	parseLine: function(line) {
+		// Implement in subclass.
+	},
+
+	/**
+	 * Creates a correctly formated dictionary entry for the key and value.
+	 * @param  {String} key
+	 * @param  {String} value
+	 * @return {String}
+	 */
+	writeLine: function(key, value) {
+		// Implement in subclass.
+	},
+
+	/**
 	 * Returns the value for the given key or undefined if the key doesn't exist.
 	 * @param  {String} key
 	 * @param  {Function} doneCb
@@ -32,39 +52,12 @@ module.exports = Backbone.Model.extend({
 	 */
 	valueForKeyArray: function(array, key) {
 		var value,
-			that = this,
 			tuple;
 
-		// Takes a line and break it into an Object with #key and #val
-		var parseLine = function(line) {
-			var xmlTagExp = /<.*name=\"(.*?)\">(.*?)<\/.*>/,
-				propertiesExp = /^(.*?)=(.*)$/,
-				tuple = {},
-				match;
-
-			switch(that.get('type')) {
-				case 'xml':
-					match = xmlTagExp.exec(line);
-					break;
-				case 'properties':
-					match = propertiesExp.exec(line);
-					break;
-			}
-
-			if (match) {
-				tuple = {
-					key: match[1],
-					val: match[2]
-				};
-			}
-
-			return tuple;
-		};
-
 		for (var i = 0; i < array.length; ++i) {
-			tuple = parseLine(array[i]);
+			tuple = this.parseLine(array[i]);
 			if (tuple.key === key) {
-				value = tuple.val;
+				value = tuple.value;
 				break;
 			}
 		}
@@ -127,15 +120,9 @@ module.exports = Backbone.Model.extend({
 			that = this;
 
 		var matchKey = function(l) {
-			var keyMatcher = function (k) {
-				if (that.get('type') === 'xml') {
-					return '\"' + k + '\"';
-				} else if (that.get('type') === 'properties') {
-					return '^' + k + '=';
-				}
-			};
-
-			return _.some(keys, function(k) { return l.match(keyMatcher(k)); });
+			return _.some(keys, function(k) {
+				return that.parseLine(l).key === k;
+			});
 		};
 
 		while(len--) {
