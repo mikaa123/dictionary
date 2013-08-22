@@ -6,7 +6,7 @@ module.exports = BaseElementView.extend({
 		'<td><%= dictionaries.length %></td>',
 		'<td><a href="#" class="manage">manage</a></td>',
 		'<td><a href="#" class="remove">remove</a></td>'
-		].join('\n')),
+	].join('\n')),
 
 	additionalEvents: {
 		'click a.manage': 'manageElement'

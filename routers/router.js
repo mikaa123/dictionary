@@ -1,11 +1,17 @@
 var CreateSetView = require('../views/create_set'),
 	ManageSetView = require('../views/manage_set'),
 	ManageSetsView = require('../views/manage_sets');
+	NavigationView = require('../views/navigation_view');
 
 module.exports = Backbone.Router.extend({
 
 	initialize: function() {
 		this.views = [];
+		this.views.navigation = new NavigationView({
+			el: $('#navigation')[0],
+			setCollection: DICTIONARY.sets,
+			router: this
+		});
 		this.views.createSet = new CreateSetView({
 			el: $('#create-set')[0]
 		});
