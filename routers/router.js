@@ -44,7 +44,7 @@ module.exports = Backbone.Router.extend({
 
 		this.views.manageSet = new ManageSetView({
 			el: $('#manage-set')[0],
-			dictionaries: DICTIONARY.current.get('dictionaries')
+			currentSet: DICTIONARY.current
 		});
 
 		$('.page').hide();

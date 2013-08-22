@@ -9,8 +9,9 @@ var DictionaryListView = require('./dictionarylist/dictionarylist_view'),
 
 module.exports = Backbone.View.extend({
 	initialize: function(options) {
+		this.currentSet = options.currentSet;
 		this.dictionaryListView = new DictionaryListView({
-			collection: options.dictionaries
+			collection: this.currentSet.get('dictionaries')
 		});
 
 		this.setCollection = new Dictionaries(DICTIONARY.sets.filter(function(s) { return s !== DICTIONARY.current; }));
@@ -141,6 +142,7 @@ module.exports = Backbone.View.extend({
 	},
 
 	render: function() {
+		this.$('h1').text(this.currentSet.get('name'));
 		this.$('.dictionary-list').html(this.dictionaryListView.el);
 		this.$('.set-list').html(this.setCollectionView.el);
 		this.$('.migrate-collection').html(this.migrateCollectionView.el);
