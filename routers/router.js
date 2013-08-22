@@ -9,7 +9,8 @@ module.exports = Backbone.Router.extend({
 		this.views = [];
 		this.views.navigation = new NavigationView({
 			el: $('#navigation')[0],
-			setCollection: DICTIONARY.sets
+			setCollection: DICTIONARY.sets,
+			router: this
 		});
 		this.views.createSet = new CreateSetView({
 			el: $('#create-set')[0]
