@@ -40,7 +40,7 @@
 						<div class="modal-content">
 							<div class="modal-header">
 								<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-								<h4 class="modal-title">Enter a name</h4>
+								<h4 class="modal-title">Create set</h4>
 							</div>
 							<div class="modal-body">
 								<div class="form-group">
@@ -57,10 +57,21 @@
 				</div><!-- /.modal -->
 
 				<input style="display:none;" id="fileDialog" type="file" multiple/>
+				<div class="page-header">
+					<h1>Create a set of dictionaries
+						<span class="pull-right">
+							<a class="btn btn-primary" id="load-files">Load files</a>
+						</span>
+					</h1>
+				</div>
 
-				<h1>Drag and drop dictionaries</h1>
+				<p class="lead">
+					A <strong>set of dictionaries</strong> is a group of files handling translation for the same keys
+					in different languages.
+				</p>
+
 				<p>
-					<a class="btn btn-primary" id="load-files"><span class="glyphicon glyphicon-plus"></span></span> Load files</a>
+					You can <strong>drag and drop</strong> dictionaries directly to the table below, or click the load file button.
 				</p>
 				<div class="dropzone"></div>
 				<a class="btn btn-success btn-default pull-right" id="createBtn" disabled="disabled">Create the set</a>
