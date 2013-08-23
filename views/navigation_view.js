@@ -67,6 +67,10 @@ var NavigationView = Backbone.View.extend({
 					break;
 			}
 		}, this));
+		this.listenTo(this.setCollection, 'add remove', _.bind(function() {
+			this.render();
+		}, this));
+		this.render();
 	},
 
 	events: {
@@ -88,6 +92,7 @@ var NavigationView = Backbone.View.extend({
 
 	render: function() {
 		this.$('.sets').html(this.navigationSetCollectionView.el);
+		this.setCollection.length ? this.$('#set-nav').show() : this.$('#set-nav').hide();
 	}
 });
 
