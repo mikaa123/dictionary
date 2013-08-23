@@ -10,6 +10,10 @@ module.exports = function(grunt) {
 			linux: {
 				binaryUrl: 'https://s3.amazonaws.com/node-webkit/v0.7.1/node-webkit-v0.7.1-linux-x64.tar.gz',
 				extractCommand: 'tar xf bin/temp -C bin/tmp --strip=1'
+			},
+			windows: {
+				binaryUrl: 'https://s3.amazonaws.com/node-webkit/v0.7.1/node-webkit-v0.7.1-win-ia32.zip',
+				extractCommand: 'unzip bin/temp -d bin/tmp'
 			}
 		}
 	});
