@@ -5,6 +5,7 @@ var BaseTableView = require('../tableview/base_table_view'),
 module.exports = BaseTableView.extend({
 	ElementView: DropZoneElementView,
 	template: _.template($('#dropzone-table-template').html()),
+	emptyTemplate: _.template($('#dropzone-empty-template').html()),
 
 	events: {
 		'dragenter': 'dragenter',

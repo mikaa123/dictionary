@@ -50,7 +50,8 @@ module.exports = Backbone.View.extend({
 		var that = this;
 		this.$('#name-prompt-modal').modal('show')
 				.on('shown.bs.modal', function() {
-					that.$('input #set-name-prompt').focus();
+					debugger;
+					that.$('input#set-name-prompt').focus();
 				});
 	},
 
