@@ -9,7 +9,12 @@ module.exports = BaseElementView.extend({
 	].join('\n')),
 
 	additionalEvents: {
-		'click a.manage': 'manageElement'
+		'click a.manage': 'manageElement',
+		'click a.remove': 'removeIntention',
+	},
+
+	removeIntention: function() {
+		this.mediator.trigger('removeIntention', this);
 	},
 
 	manageElement: function() {
