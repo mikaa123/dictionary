@@ -18,14 +18,30 @@ module.exports = Backbone.View.extend({
 			mediator: this.mediator
 		});
 
-		this.listenTo(this.mediator, 'removeIntention', function(item) {
-		});
+		this.listenTo(this.mediator, 'removeIntention', _.bind(function(item) {
+			this.$('.modal .set-name').text(item.model.get('name'));
+			this.$('.modal').modal('show');
+			this.selectedItem = item;
+		}, this));
 
 		this.render();
 	},
 
 	events: {
-		'click #add-set': 'addSet'
+		'click #add-set': 'addSet',
+		'click #confirmation-delete': 'deleteSelectedItem',
+		'click #confirmation-close': 'closeModal'
+
+	},
+
+	closeModal: function() {
+		this.$('.modal').modal('hide');
+	},
+
+	deleteSelectedItem: function() {
+		this.selectedItem && this.selectedItem.removeElement();
+		debugger;
+		this.closeModal();
 	},
 
 	addSet: function() {
