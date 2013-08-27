@@ -21,7 +21,7 @@ module.exports = Backbone.Model.extend({
 			var newDictionary = this.getLang(oldDictionary.get('lang'));
 
 			if (newDictionary) {
-				async.each(migrateKeyCollection.models, function(keyTuple, cb) {
+				async.eachSeries(migrateKeyCollection.models, function(keyTuple, cb) {
 					oldDictionary.valueForKey(keyTuple.get('oldKey'), function(value) {
 						if (value) {
 							newDictionary.addEntry(keyTuple.get('newKey'), value, cb);
