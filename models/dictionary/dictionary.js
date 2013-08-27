@@ -65,6 +65,35 @@ module.exports = Backbone.Model.extend({
 		return value;
 	},
 
+	hasKey: function(key, doneCb) {
+		var that = this;
+
+		this.dictionaryArray(function(dataArray) {
+			var value = that.hasKeyForArray(dataArray, key);
+			doneCb(value);
+		});
+	},
+
+	/**
+	 * Calls doneCb with a boolean indicating if the dictionary has the key.
+	 * @param  {String}  key
+	 * @param  {Function}  doneCb
+	 */
+	hasKeyForArray: function(array, key) {
+		var value = false,
+			tuple;
+
+		for (var i = 0; i < array.length; ++i) {
+			tuple = this.parseLine(array[i]);
+			if (tuple.key === key) {
+				value = true;
+				break;
+			}
+		}
+
+		return value;
+	},
+
 	/**
 	 * Appends the <key, val> tuple at the end of the dictionary's file; save it;
 	 * and call the cb.

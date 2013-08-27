@@ -9,8 +9,8 @@ var assert = require('assert'),
 global.Backbone = require('backbone');
 global._ = require('underscore');
 
-DictionaryXML = require('../../models/dictionary_xml');
-DictionaryProperties = require('../../models/dictionary_properties');
+DictionaryXML = require('../../models/dictionary/dictionary_xml');
+DictionaryProperties = require('../../models/dictionary/dictionary_properties');
 
 var dictionaryXML = new DictionaryXML(),
 	dictionaryProperties = new DictionaryProperties(),
@@ -129,6 +129,14 @@ describe('Dictionary', function() {
 		});
 		it('returns nothing if the key is not found', function() {
 			assert.deepEqual(dictionaryProperties.valueForKeyArray(propertiesFile, 'UNDEFINEDKEY'), undefined);
+		});
+	});
+	describe('#hasKeyFor array', function() {
+		it('returns true when the key exist', function() {
+			assert.equal(dictionaryXML.hasKeyForArray(xmlFile, 'AUTHENTICATE_STATUS_2'), true);
+		});
+		it('returns false when the key dosnt exist', function() {
+			assert.equal(dictionaryXML.hasKeyForArray(xmlFile, 'AUTHENTICATE_STATUS_20'), false);
 		});
 	});
 });
