@@ -9,6 +9,7 @@ var DictionaryListView = require('./dictionarylist/dictionarylist_view'),
 
 module.exports = Backbone.View.extend({
 	initialize: function(options) {
+		this.mediator = _.extend({}, Backbone.Events);
 		this.currentSet = options.currentSet;
 		this.dictionaryListView = new DictionaryListView({
 			collection: this.currentSet.get('dictionaries')
@@ -18,7 +19,8 @@ module.exports = Backbone.View.extend({
 		this.setCollectionView = new SetCollectionView({
 			collection: this.setCollection,
 			template: _.template($('#setcollection-select-table-template').html()),
-			ElementView: SetCollectionElementSelectView
+			ElementView: SetCollectionElementSelectView,
+			mediator: this.mediator
 		});
 
 		this.migrateKeyCollection = new MigrateKeyCollection();
@@ -137,7 +139,7 @@ module.exports = Backbone.View.extend({
 			set.migrate(currentSubSet, that.migrateKeyCollection, callback);
 		}, function(err) {
 			that.$('#migrate-modal-migrate').button('reset');
-			that.$('#migrate-modal').modal('hide');
+			that.migrateDialogClose();
 		});
 	},
 
