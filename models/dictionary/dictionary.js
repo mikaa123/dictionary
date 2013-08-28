@@ -140,7 +140,9 @@ module.exports = Backbone.Model.extend({
 	removeKeys: function(keys, done) {
 		var that = this;
 		this.dictionaryArray(function(dataArray) {
-			that.save(that.removeKeysFromArray(dataArray, keys).join('\n'), done);
+			var initialLength = dataArray.length,
+				newDataArray = that.removeKeysFromArray(dataArray, keys);
+			that.save(newDataArray.join('\n'), done(initialLength - newDataArray.length));
 		});
 	},
 

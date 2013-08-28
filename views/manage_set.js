@@ -31,6 +31,30 @@ function migrationFeedbackMaker(options) {
 	};
 }
 
+function deleteFeedbackMaker(options) {
+	var html = function() {
+		if (options.deleted) {
+			return '<b>Well done!</b> You deleted ' + options.deleted + ' keys.';
+		} else {
+			return '<b>Oh snap!</b> No keys were deleted';
+		}
+	};
+
+	return {
+		execute: function($successAlert, $errorAlert) {
+			if (options.deleted) {
+				$alert = $successAlert;
+			} else {
+				$alert = $errorAlert;
+			}
+
+			$alert.html(html()).fadeIn(2000, function() {
+				$alert.fadeOut(2000);
+			});
+		}
+	};
+}
+
 module.exports = Backbone.View.extend({
 	initialize: function(options) {
 		this.mediator = _.extend({}, Backbone.Events);
@@ -100,16 +124,22 @@ module.exports = Backbone.View.extend({
 	deleteKeys: function(e) {
 		var keys = this.keysFromPrompt(),
 			selectedDictionaries = this.filterSelectedFrom(this.dictionaryListView.collection),
-			$button = $(e.currentTarget);
+			$button = $(e.currentTarget),
+			that = this;
 
 		$button.button('loading');
-		_.each(selectedDictionaries, function(dictionary) {
-			dictionary.removeKeys(keys, function() {
-				$(e.currentTarget).button('complete');
-				setTimeout(function() {
-					$(e.currentTarget).button('reset');
-				}, 500);
+		async.reduce(selectedDictionaries, 0, function(memo, dictionary, callback) {
+			dictionary.removeKeys(keys, function(keyRemoved) { 
+				callback(null, memo + keyRemoved);
 			});
+		}, function(err, result) {
+			$(e.currentTarget).button('complete');
+			that.mediator.trigger('feedback', deleteFeedbackMaker({
+				deleted: result
+			}));
+			setTimeout(function() {
+				$(e.currentTarget).button('reset');
+			}, 500);
 		});
 	},
 
