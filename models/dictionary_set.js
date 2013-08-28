@@ -16,7 +16,15 @@ module.exports = Backbone.Model.extend({
 		});
 	},
 
+	/**
+	 * Migrate the keys of the `oldSet` with this set.
+	 * @param  {oldSet}   oldSet
+	 * @param  {MigrateKeyCollection}   migrateKeyCollection
+	 * @param  {Function(err, migratedKeys)} done - migratedKey is the number of keys migrated
+	 */
 	migrate: function(oldSet, migrateKeyCollection, done) {
+		var migratedKeys = 0;
+
 		// Here's the gist of how the algorithm works.
 		// It's going to iterate over the old set of dictionaries; and each time will look for the
 		// corresponding dictionary in the new set. Once found, it will take each key and perform in *serie*
@@ -33,6 +41,7 @@ module.exports = Backbone.Model.extend({
 						} else {
 							oldDictionary.valueForKey(keyTuple.get('oldKey'), function(value) {
 								if (value) {
+									migratedKeys++;
 									newDictionary.addEntry(keyTuple.get('newKey'), value, cb);
 								} else {
 									cb();
@@ -46,7 +55,7 @@ module.exports = Backbone.Model.extend({
 				});
 			}
 		}, this), function( err ) {
-			done();
+			done(migratedKeys);
 		});
 	},
 

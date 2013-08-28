@@ -7,6 +7,30 @@ var DictionaryListView = require('./dictionarylist/dictionarylist_view'),
 	DictionarySet = require('../models/dictionary_set'),
 	async = require('async');
 
+function migrationFeedbackMaker(options) {
+	var html = function() {
+		if (options.migrated) {
+			return '<b>Well done!</b> You successfully ported ' + options.migrated + ' keys to ' + options.targets.join(',') + '.';
+		} else {
+			return '<b>Oh snap!</b> No keys were ported to ' + options.targets.join(',') + '.';
+		}
+	};
+
+	return {
+		execute: function($successAlert, $errorAlert) {
+			if (options.migrated) {
+				$alert = $successAlert;
+			} else {
+				$alert = $errorAlert;
+			}
+
+			$alert.html(html()).fadeIn(2000, function() {
+				$alert.fadeOut(2000);
+			});
+		}
+	};
+}
+
 module.exports = Backbone.View.extend({
 	initialize: function(options) {
 		this.mediator = _.extend({}, Backbone.Events);
@@ -26,6 +50,10 @@ module.exports = Backbone.View.extend({
 		this.migrateKeyCollection = new MigrateKeyCollection();
 		this.migrateCollectionView = new MigrateCollectionView({
 			collection: this.migrateKeyCollection
+		});
+
+		this.listenTo(this.mediator, 'feedback', function(feedback) {
+			feedback.execute($('.success-feedback'), $('.error-feedback'));
 		});
 
 		this.render();
@@ -135,11 +163,19 @@ module.exports = Backbone.View.extend({
 		});
 
 		// Now we can migrate each of the selected sets with the sub-set chose by the user.
-		async.each(selectedSets, function(set, callback) {
-			set.migrate(currentSubSet, that.migrateKeyCollection, callback);
-		}, function(err) {
+		async.reduce(selectedSets, 0, function(totalMigrated, set, callback) {
+			set.migrate(currentSubSet, that.migrateKeyCollection, function(migrated) {
+				callback(null, totalMigrated + migrated);
+			});
+		}, function(err, result) {
 			that.$('#migrate-modal-migrate').button('reset');
 			that.migrateDialogClose();
+			that.mediator.trigger('feedback', migrationFeedbackMaker({
+				migrated: result,
+				targets: selectedSets.map(function(set) {
+					return set.get('name');
+				})
+			}));
 		});
 	},
 
