@@ -2,9 +2,9 @@ module.exports = Backbone.View.extend({
 	tagName: 'tr',
 
 	initialize: function(options) {
-		this.mediator = this.options.mediator;
 		this.listenTo(this.model, 'change', this.render);
 		this.listenTo(this.model, 'destroy', this.remove);
+		this.mediator = this.options.mediator;
 		this.render();
 	},
 
