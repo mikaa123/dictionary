@@ -6,9 +6,8 @@ module.exports = BaseTableView.extend({
 	template: _.template($('#setcollection-table-template').html()),
 
 	initialize: function(options) {
-		if (!options.mediator) throw "A meditator object is needed.";
 		this.ElementView = options.ElementView || this.ElementView;
 		this.template = options.template || this.template;
-		BaseTableView.prototype.initialize.call(this, options);
+		BaseTableView.prototype.initialize.apply(this, arguments);
 	}
 });
