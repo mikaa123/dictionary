@@ -20,7 +20,7 @@ module.exports = Dictionary.extend({
 	},
 
 	writeLine: function(key, value) {
-		return key +'='+ val;
+		return key +'='+ value;
 	},
 
 	initialize: function(options) {

@@ -10,6 +10,13 @@ module.exports = Backbone.Model.extend({
 	},
 
 	/**
+	 * Returns whether the file uses LF for newline.
+	 * It's often the case on Windows systems.
+	 * @type {Boolean}
+	 */
+	lineFeed: true,
+
+	/**
 	 * Parse a line into a <key, value> tuple.
 	 * @abstract
 	 * @line {String}
@@ -102,18 +109,14 @@ module.exports = Backbone.Model.extend({
 	 * @param {Function} val
 	 */
 	addEntry: function(key, val, cb) {
-		var that = this;
-		var newEntry = function() {
-			if (that.get('type') === 'xml') {
-				return '<term name="'+ key +'">'+ val +'</term>';
-			} else if (that.get('type') === 'properties') {
-				return key +'='+ val;
-			}
-		};
+		var that = this,
+			newEntry = this.writeLine(key, val);
+
+		newEntry += (this.lineFeed) ? '\r\n' : '\n';
 
 		this.dictionaryArray(function(dataArray) {
-			dataArray.push(newEntry());
-			that.save(dataArray.join('\n'), cb);
+			var fileStr = dataArray.join('\n');
+			that.save(fileStr.concat(newEntry), cb);
 		});
 	},
 
@@ -123,8 +126,13 @@ module.exports = Backbone.Model.extend({
 	 * @return {Arrau}
 	 */
 	dictionaryArray: function(doneCb) {
+		var that = this;
 		readFile(this.get('path')).then(function(data) {
-			doneCb(data.toString().split('\n'));
+			doneCb((function() {
+				var dataArray = data.toString().split('\n');
+				if (_.last(dataArray[0]) === '\r') that.lineFeed = true;
+				return data.toString().split('\n');
+			})());
 		});
 	},
 
