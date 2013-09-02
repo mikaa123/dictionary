@@ -8,14 +8,14 @@ module.exports = BaseElementView.extend({
 	].join('\n')),
 
 	additionalEvents: {
-		'click input': 'selection'
+		'click': 'toggleSelection'
 	},
 
-	selection: function() {
-		if (this.$('input').attr('checked')) {
-			this.model.set('selected', true);
-		} else {
+	toggleSelection: function() {
+		if (this.model.get('selected')) {
 			this.model.set('selected', false);
+		} else {
+			this.model.set('selected', true);
 		}
 	}
 });
