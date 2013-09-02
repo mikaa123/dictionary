@@ -112,11 +112,21 @@ module.exports = Backbone.Model.extend({
 		var that = this,
 			newEntry = this.writeLine(key, val);
 
+		// Adds a newline if there are no newline at the end of the file.
+		var addNewline = function(dataArray) {
+			var dataString = dataArray.join('\n');
+			if (that.lineFeed) {
+				if (dataString.substr(-2) !== '\r\n') dataString += '\r\n';
+			} else {
+				if (dataString.substr(-1) !== '\n') dataString += '\n';
+			}
+			return dataString;
+		};
+
 		newEntry += (this.lineFeed) ? '\r\n' : '\n';
 
 		this.dictionaryArray(function(dataArray) {
-			var fileStr = dataArray.join('\n');
-			that.save(fileStr.concat(newEntry), cb);
+			that.save(addNewline(dataArray).concat(newEntry), cb);
 		});
 	},
 

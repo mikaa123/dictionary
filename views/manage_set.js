@@ -100,7 +100,15 @@ module.exports = Backbone.View.extend({
 		'click a#delete-keys': 'deleteKeys',
 		'click a#migrate-keys': 'migrateDialogOpen',
 		'click #migrate-modal-close': 'migrateDialogClose',
-		'click #migrate-modal-migrate': 'migrateKeys'
+		'click #migrate-modal-migrate': 'migrateKeys',
+		'click #select-all': 'toggleAllDictionaries',
+	},
+
+	toggleAllDictionaries: function() {
+		var checked = this.$('#select-all').is(':checked');
+		this.currentSet.get('dictionaries').each(function(d) {
+			d.set('selected', checked);
+		});
 	},
 
 	keyTyped: function() {
