@@ -10,11 +10,19 @@ module.exports = Backbone.Model.extend({
 	},
 
 	/**
-	 * Returns whether the file uses LF for newline.
+	 * Returns whether the file uses CR for newline.
 	 * It's often the case on Windows systems.
 	 * @type {Boolean}
 	 */
-	lineFeed: true,
+	carriageReturn: false,
+
+	/**
+	 * Returns the correct newline sequence.
+	 * @return {[type]} [description]
+	 */
+	newLine: function() {
+		return this.carriageReturn ? '\r\n' : '\n';
+	},
 
 	/**
 	 * Parse a line into a <key, value> tuple.
@@ -109,24 +117,10 @@ module.exports = Backbone.Model.extend({
 	 * @param {Function} val
 	 */
 	addEntry: function(key, val, cb) {
-		var that = this,
-			newEntry = this.writeLine(key, val);
-
-		// Adds a newline if there are no newline at the end of the file.
-		var addNewline = function(dataArray) {
-			var dataString = dataArray.join('\n');
-			if (that.lineFeed) {
-				if (dataString.substr(-2) !== '\r\n') dataString += '\r\n';
-			} else {
-				if (dataString.substr(-1) !== '\n') dataString += '\n';
-			}
-			return dataString;
-		};
-
-		newEntry += (this.lineFeed) ? '\r\n' : '\n';
-
+		var that = this;
 		this.dictionaryArray(function(dataArray) {
-			that.save(addNewline(dataArray).concat(newEntry), cb);
+			dataArray.push(that.writeLine(key, val));
+			that.save(dataArray.join(that.newLine()), cb);
 		});
 	},
 
@@ -140,8 +134,18 @@ module.exports = Backbone.Model.extend({
 		readFile(this.get('path')).then(function(data) {
 			doneCb((function() {
 				var dataArray = data.toString().split('\n');
-				if (_.last(dataArray[0]) === '\r') that.lineFeed = true;
-				return data.toString().split('\n');
+
+				if (dataArray[0].substr(-1) === '\r') {
+					// In the case of a CR/LF file, let's remove all the remainings
+					// '\r' at the end of each lines. We'll re-write them properly when
+					// saving. If we don't do that, the reg-exp to match line need to be changed.
+					
+					that.carriageReturn = true;
+					dataArray = _.map(dataArray, function(l) {
+						return l.slice(0, l.length - 1);
+					});
+				}
+				return dataArray;
 			})());
 		});
 	},
@@ -160,7 +164,7 @@ module.exports = Backbone.Model.extend({
 		this.dictionaryArray(function(dataArray) {
 			var initialLength = dataArray.length,
 				newDataArray = that.removeKeysFromArray(dataArray, keys);
-			that.save(newDataArray.join('\n'), done(initialLength - newDataArray.length));
+			that.save(newDataArray.join(that.newLine()), done(initialLength - newDataArray.length));
 		});
 	},
 
