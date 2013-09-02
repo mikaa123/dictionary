@@ -131,19 +131,23 @@ module.exports = Backbone.Model.extend({
 	 */
 	dictionaryArray: function(doneCb) {
 		var that = this;
+
+		var cleanCR = function(array) {
+			return _.map(array, function(l) {
+				return l.slice(0, l.length - 1);
+			});
+		};
+
 		readFile(this.get('path')).then(function(data) {
 			doneCb((function() {
 				var dataArray = data.toString().split('\n');
-
 				if (dataArray[0].substr(-1) === '\r') {
 					// In the case of a CR/LF file, let's remove all the remainings
 					// '\r' at the end of each lines. We'll re-write them properly when
 					// saving. If we don't do that, the reg-exp to match line need to be changed.
 					
 					that.carriageReturn = true;
-					dataArray = _.map(dataArray, function(l) {
-						return l.slice(0, l.length - 1);
-					});
+					dataArray = cleanCR(dataArray);
 				}
 				return dataArray;
 			})());
