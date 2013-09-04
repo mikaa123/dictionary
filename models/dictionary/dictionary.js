@@ -134,7 +134,10 @@ module.exports = Backbone.Model.extend({
 
 		var cleanCR = function(array) {
 			return _.map(array, function(l) {
-				return l.slice(0, l.length - 1);
+				if (l.substr(-1) === '\r') {
+					return l.slice(0, l.length - 1);
+				}
+				return l;
 			});
 		};
 
