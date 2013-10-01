@@ -47,4 +47,13 @@ module.exports = function(grunt) {
 			done();
 		});
 	});
+
+ // Alias the `test` task to run `mocha-phantomjs` instead
+  grunt.registerTask('test', 'run mocha test suite', function () {
+    var done = this.async();
+    require('child_process').exec('mocha tests/models/dictionary_test.js', function (err, stdout) {
+      grunt.log.write(stdout);
+      done(err);
+    });
+  });
 };

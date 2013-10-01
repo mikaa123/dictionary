@@ -85,6 +85,12 @@ module.exports = Backbone.View.extend({
 		this.$('#keys').val('');
 	},
 
+	changeSet: function(newSet) {
+		this.stopListening();
+		this.delegateEvents();
+		this.initialize({ currentSet: newSet });
+	},
+
 	disableBtns: function(b) {
 		if (b) {
 			this.$('#migrate-keys').attr('disabled', 'disabled');

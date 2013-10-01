@@ -42,10 +42,14 @@ module.exports = Backbone.Router.extend({
 			return;
 		}
 
-		this.views.manageSet = new ManageSetView({
-			el: $('#manage-set')[0],
-			currentSet: DICTIONARY.current
-		});
+		if (this.views.manageSet) {
+			this.views.manageSet.changeSet(DICTIONARY.current);
+		} else {
+			this.views.manageSet = new ManageSetView({
+				el: $('#manage-set')[0],
+				currentSet: DICTIONARY.current
+			});
+		}
 
 		$('.page').hide();
 		$('#manage-set').show();
