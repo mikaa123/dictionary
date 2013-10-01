@@ -8,17 +8,7 @@ module.exports = BaseTableView.extend({
 	emptyTemplate: _.template($('#dropzone-empty-template').html()),
 
 	events: {
-		'dragenter': 'dragenter',
-		'dragleave': 'dragleave',
 		'drop': 'drop'
-	},
-
-	dragenter: function() {
-		console.log('drag file');
-	},
-
-	dragleave: function() {
-		console.log('byebye');
 	},
 
 	addFile: function(file) {
