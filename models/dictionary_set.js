@@ -2,7 +2,7 @@ var async = require('async');
 
 module.exports = Backbone.Model.extend({
 	defaults: {
-		selected: false
+		selected: true
 	},
 
 	/**
